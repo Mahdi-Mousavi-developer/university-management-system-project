@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentRepository {
+public class StudentRepositoryImpl {
     private Database database= new Database();
     private static final String GET_ALL_STUDENT_QUERY = "SELECT * FROM student;";
     private static final String GET_COUNT_OF_STUDENT = "SELECT count(*) FROM student;";
@@ -38,7 +38,6 @@ public class StudentRepository {
         }
         return studentCount;
     }
-
 
 
 }

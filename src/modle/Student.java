@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Student {
     private long studentId;
@@ -74,8 +75,18 @@ public class Student {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return studentId == student.studentId && Objects.equals(nationalCode, student.nationalCode);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentId, nationalCode);
+    }
 
     @Override
     public String toString() {

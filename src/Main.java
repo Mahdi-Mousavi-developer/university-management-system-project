@@ -1,11 +1,17 @@
 import modle.Student;
+import service.CourseServiceImpl;
+import service.ExamServiceImpl;
 import service.StudentServiceImpl;
+import service.TeacherServiceImpl;
 
 public class Main {
     public static void main (String[]args){
-        StudentServiceImpl studentService = new StudentServiceImpl();
-        studentService.printAllStudentList();
-        studentService.printCountOfStudent();
+   /*     ExamServiceImpl examService = new ExamServiceImpl();
+        examService.printAllExam();
+        examService.PrintCountOfExam();*/
+        CourseServiceImpl courseService = new CourseServiceImpl();
+        courseService.printAllCourse();
+        courseService.printCountCourse();
 
     }
 }

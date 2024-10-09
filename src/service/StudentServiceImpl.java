@@ -1,16 +1,16 @@
 package service;
 
 import modle.Student;
-import repository.StudentRepository;
+import repository.StudentRepositoryImpl;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class StudentServiceImpl {
-    private StudentRepository studentRepository = new StudentRepository();
+    private StudentRepositoryImpl studentRepositoryImpl = new StudentRepositoryImpl();
     public  void printAllStudentList(){
         try{
-            List<Student> students = studentRepository.getAllStudent();
+            List<Student> students = studentRepositoryImpl.getAllStudent();
             for (Student student : students){
                 System.out.println(student);
             }
@@ -23,7 +23,7 @@ public class StudentServiceImpl {
 
     public void printCountOfStudent() {
         try {
-            int countStudent = studentRepository.getCountOfStudent();
+            int countStudent = studentRepositoryImpl.getCountOfStudent();
             System.out.println("number of student : ".concat(String.valueOf(countStudent)));
         }catch(SQLException sqlException){
             System.out.println("there is problem with connecting to database");
