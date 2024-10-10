@@ -24,10 +24,10 @@ public class ExamRepositoryImpl {
     private static final String GET_COUNT_OF_EXAM = "SELECT count(*) FROM exam;";
     private static final String SAVE_EXAM = "insert into public.exam (teacher_id,national_code,course_id,exam_grade,exam_date)" +
             "values(?,?,?,?,?)";
-    private static final String UPDATE_EXAM = "update public.student set (teacher_id,national_code,course_id,exam_grade,exam_date)" +
-            "values(?,?,?,?,?) where exam_id=?";
+    private static final String UPDATE_EXAM = "update public.exam set teacher_id=?,national_code=?,course_id=?,exam_grade=?,exam_date=?" +
+            "where exam_id=?";
 
-    private static final String DELETE_EXAM = "delete from exam where student_id = ?;";
+    private static final String DELETE_EXAM = "delete from exam where exam_id = ?;";
 
 
     public List<Exam> getAllExam() throws SQLException {
@@ -74,7 +74,7 @@ public class ExamRepositoryImpl {
         ps.executeUpdate();
     }
     public void mergeExam(Exam exam) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(SAVE_EXAM);
+        PreparedStatement ps = conn.prepareStatement(UPDATE_EXAM);
         ps.setLong(1, exam.getTeacherId());
         ps.setString(2, exam.getNationalCode());
         ps.setLong(3, exam.getCourseId());

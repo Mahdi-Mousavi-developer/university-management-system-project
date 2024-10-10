@@ -27,8 +27,8 @@ public class CourseRepositoryImpl {
     private static final String GET_COUNT_OF_Course = "SELECT count(*) FROM course;";
     private static final String SAVE_COURSE = "insert into public.course (course_title , course_unite)" +
             "values(?,?)";
-    private static final String UPDATE_COURSE = "update public.course set(course_title , course_unite)" +
-            "values(?,?) where course_id = ?";
+    private static final String UPDATE_COURSE = "update public.course set course_title=? , course_unite=?" +
+            " where course_id = ?";
     private static final String DELETE_COURSE = "delete from course where course_id = ?;";
 
     public List<Course> getAllCourse() throws SQLException {

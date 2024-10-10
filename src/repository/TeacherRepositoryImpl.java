@@ -23,10 +23,10 @@ public class TeacherRepositoryImpl {
 
     private static final String SAVE_TEACHER = "insert into public.teachers (national_code,first_name,last_name,dob,course_id)"+
             "values(?,?,?,?,?)";
-    private static final String UPDATE_TEACHER = "update public.teachers set (national_code,first_name,last_name,dob,course_id)"+
-            "values(?,?,?,?,?) where teacher_id=?";
+    private static final String UPDATE_TEACHER = "update public.teachers set national_code=?,first_name=?,last_name=?,dob=?,course_id=?"+
+            " where teacher_id=?";
 
-    private static final String DELETE_TEACHER ="delete from teachers where student_id = ?;";
+    private static final String DELETE_TEACHER ="delete from teachers where teacher_id = ?;";
     public List<Teacher> getAllTeacher() throws SQLException{
         ResultSet teacherResult = database.getSQLStatementS().executeQuery(GET_ALL_TEACHER_QUERY);
         List<Teacher> teachers = new ArrayList<>();
