@@ -8,10 +8,13 @@ public class Main {
     public static void main (String[]args){
    /*     ExamServiceImpl examService = new ExamServiceImpl();
         examService.printAllExam();
-        examService.PrintCountOfExam();*/
+        examService.PrintCountOfExam();
         CourseServiceImpl courseService = new CourseServiceImpl();
         courseService.printAllCourse();
-        courseService.printCountCourse();
+        courseService.printCountCourse();*/
+        StudentServiceImpl student = new StudentServiceImpl();
+        student.printCountOfStudent();
+        student.printAllStudentList();
 
     }
 }

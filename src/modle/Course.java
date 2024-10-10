@@ -3,24 +3,25 @@ package modle;
 import java.util.Objects;
 
 public class Course {
-    private long courseId;
+    private Integer courseId;
     private String courseTitle;
     private long courseUnite;
 
     public Course() {
     }
 
-    public Course(long courseId, String courseTitle, long courseUnite) {
+    public Course(Integer courseId, String courseTitle, long courseUnite) {
         this.courseId = courseId;
         this.courseTitle = courseTitle;
         this.courseUnite = courseUnite;
     }
 
-    public long getCourseId() {
+
+    public Integer getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(long courseId) {
+    public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }
 

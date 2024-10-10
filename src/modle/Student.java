@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Student {
-    private long studentId;
+    private Integer studentId;
     private String nationalCode;
     private String firstName;
     private String lastName;
@@ -17,7 +17,7 @@ public class Student {
     public Student() {
     }
 
-    public Student(long studentId, String nationalCode, String firstName, String lastName, Date dob, double gpu) {
+    public Student(Integer studentId, String nationalCode, String firstName, String lastName, Date dob, double gpu) {
         this.studentId = studentId;
         this.nationalCode = nationalCode;
         this.firstName = firstName;
@@ -26,11 +26,11 @@ public class Student {
         this.gpu = gpu;
     }
 
-    public long getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(long studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 

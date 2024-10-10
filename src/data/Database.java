@@ -17,5 +17,8 @@ public class Database {
     public Statement getSQLStatementS() throws SQLException {
         return getConnectionToDataBase().createStatement();
     }
+    public static Connection getConnectionStatic() throws SQLException{
+        return DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+    }
 
 }

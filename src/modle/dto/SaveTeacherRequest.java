@@ -1,9 +1,8 @@
-package modle;
+package modle.dto;
 
 import java.util.Date;
-import java.util.Objects;
 
-public class Teacher {
+public class SaveTeacherRequest {
     private Integer teacherId;
     private String nationalCode;
     private String firstName;
@@ -11,16 +10,13 @@ public class Teacher {
     private Date dob;
     private long courseId;
 
-    public Teacher(Integer teacherId, String nationalCode, String firstName, String lastName, Date dob, long courseId) {
+    public SaveTeacherRequest(Integer teacherId, String nationalCode, String firstName, String lastName, Date dob, long courseId) {
         this.teacherId = teacherId;
         this.nationalCode = nationalCode;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
         this.courseId = courseId;
-    }
-
-    public Teacher() {
     }
 
     public Integer getTeacherId() {
@@ -69,30 +65,5 @@ public class Teacher {
 
     public void setCourseId(long courseId) {
         this.courseId = courseId;
-    }
-
-    @Override
-    public String toString() {
-        return "Teacher{" +
-                "teacherId=" + teacherId +
-                ", nationalCode='" + nationalCode + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", dob=" + dob +
-                ", courseId=" + courseId +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Teacher teacher = (Teacher) o;
-        return teacherId == teacher.teacherId && Objects.equals(nationalCode, teacher.nationalCode);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(teacherId, nationalCode);
     }
 }

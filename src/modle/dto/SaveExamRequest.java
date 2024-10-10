@@ -1,9 +1,8 @@
-package modle;
+package modle.dto;
 
 import java.util.Date;
-import java.util.Objects;
 
-public class Exam {
+public class SaveExamRequest {
     private Integer examId;
     private Integer teacherId;
     private String nationalCode;
@@ -11,10 +10,7 @@ public class Exam {
     private long examGrade;
     private Date examDate;
 
-    public Exam() {
-    }
-
-    public Exam(Integer examId, Integer teacherId, String nationalCode, Integer courseId, long examGrade, Date examDate) {
+    public SaveExamRequest(Integer examId, Integer teacherId, String nationalCode, Integer courseId, long examGrade, Date examDate) {
         this.examId = examId;
         this.teacherId = teacherId;
         this.nationalCode = nationalCode;
@@ -39,14 +35,6 @@ public class Exam {
         this.teacherId = teacherId;
     }
 
-    public Integer getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Integer courseId) {
-        this.courseId = courseId;
-    }
-
     public String getNationalCode() {
         return nationalCode;
     }
@@ -55,6 +43,13 @@ public class Exam {
         this.nationalCode = nationalCode;
     }
 
+    public Integer getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
 
     public long getExamGrade() {
         return examGrade;
@@ -70,30 +65,5 @@ public class Exam {
 
     public void setExamDate(Date examDate) {
         this.examDate = examDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Exam{" +
-                "examId=" + examId +
-                ", teacherId=" + teacherId +
-                ", nationalCode='" + nationalCode + '\'' +
-                ", courseId=" + courseId +
-                ", examGrade=" + examGrade +
-                ", examDate=" + examDate +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Exam exam = (Exam) o;
-        return examId == exam.examId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(examId);
     }
 }
