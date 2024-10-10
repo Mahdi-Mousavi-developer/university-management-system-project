@@ -20,7 +20,6 @@ public class TeacherRepositoryImpl {
     }
     private static final String GET_ALL_TEACHER_QUERY = "SELECT * FROM teachers;";
     private static final String GET_COUNT_OF_TEACHER = "SELECT count(*) FROM teachers";
-
     private static final String SAVE_TEACHER = "insert into public.teachers (national_code,first_name,last_name,dob,course_id)"+
             "values(?,?,?,?,?)";
     private static final String UPDATE_TEACHER = "update public.teachers set national_code=?,first_name=?,last_name=?,dob=?,course_id=?"+
