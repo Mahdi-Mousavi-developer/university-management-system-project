@@ -1,6 +1,7 @@
 package service;
 
 
+import exception.TeacherNotFindException;
 import modle.Teacher;
 
 import modle.dto.SaveTeacherRequest;
@@ -37,9 +38,10 @@ public class TeacherServiceImpl {
     public void delete(Integer id) {
         checkIdTeacher(id);
         try {
-            teacherRepository.DeleteTeacher(id);
+            teacherRepository.deleteTeacher(id);
+            System.out.println("done");
             printAllTeacher();
-        } catch (SQLException e) {
+        } catch (SQLException | TeacherNotFindException e) {
             System.out.println("there is problem with connecting to database");
         }
     }

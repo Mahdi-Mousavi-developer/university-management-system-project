@@ -1,12 +1,14 @@
 package repository;
 
 import data.Database;
+import exception.TeacherNotFindException;
 import modle.Student;
 import modle.Teacher;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TeacherRepositoryImpl {
     private Database database= new Database();
@@ -25,7 +27,11 @@ public class TeacherRepositoryImpl {
     private static final String UPDATE_TEACHER = "update public.teachers set national_code=?,first_name=?,last_name=?,dob=?,course_id=?"+
             " where teacher_id=?";
 
-    private static final String DELETE_TEACHER ="delete from teachers where teacher_id = ?;";
+    private static final String DELETE_TEACHER_EXAM = "delete from exam where teacher_id = ?;";
+    private static final String DELETE_TEACHER_BY_ID_ = "delete from teachers where teacher_id = ?;";
+    private static final String FIND_TEACHER_BY_ID = "select * from teachers where teacher_id = ?;";
+
+
     public List<Teacher> getAllTeacher() throws SQLException{
         ResultSet teacherResult = database.getSQLStatementS().executeQuery(GET_ALL_TEACHER_QUERY);
         List<Teacher> teachers = new ArrayList<>();
@@ -79,13 +85,42 @@ public class TeacherRepositoryImpl {
 
     }
 
-    public void DeleteTeacher (int teacherId) throws  SQLException{
-        PreparedStatement ps = conn.prepareStatement(DELETE_TEACHER);
-        ps.setInt(1,teacherId);
-        ps.executeUpdate();
+    public void deleteTeacher(int teacherId) throws SQLException, TeacherNotFindException {
+        if (this.findById(teacherId).isPresent()) {
+            PreparedStatement ps = conn.prepareStatement(DELETE_TEACHER_EXAM);
+            ps.setInt(1, teacherId);
+            ps.executeUpdate();
 
+              ps = conn.prepareStatement(DELETE_TEACHER_BY_ID_);
+              ps.setInt(1, teacherId);
+            ps.executeUpdate();
 
+        } else {
+            throw new TeacherNotFindException("teacher with id".concat(String.valueOf(teacherId)).concat(" not found"));
+        }
     }
+
+    public Optional<Teacher> findById(int teacherId) throws SQLException{
+        PreparedStatement ps = conn.prepareStatement(FIND_TEACHER_BY_ID);
+        ps.setInt(1, teacherId);
+        ResultSet rs = ps.executeQuery();
+        Optional<Teacher> optionalTeacher = Optional.empty();
+        while (rs.next()){
+           Teacher teacher = new Teacher();
+           teacher.setTeacherId(rs.getInt("teacher_id"));
+           teacher.setNationalCode(rs.getString("national_code"));
+           teacher.setFirstName(rs.getString("first_name"));
+           teacher.setLastName(rs.getString("last_name"));
+           teacher.setDob(rs.getDate("dob"));
+           teacher.setCourseId(rs.getLong("course_id"));
+            optionalTeacher = Optional.of(teacher);
+
+        }
+        return optionalTeacher;
+    }
+
+
+
 
 
 }

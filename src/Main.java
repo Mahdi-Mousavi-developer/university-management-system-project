@@ -11,10 +11,13 @@ public class Main {
         examService.PrintCountOfExam();
         CourseServiceImpl courseService = new CourseServiceImpl();
         courseService.printAllCourse();
-        courseService.printCountCourse();*/
+        courseService.printCountCourse()
         StudentServiceImpl student = new StudentServiceImpl();
         student.printCountOfStudent();
-        student.printAllStudentList();
+        student.printAllStudentList();;*/
+        TeacherServiceImpl teacherService = new TeacherServiceImpl();
+        teacherService.printAllTeacher();
+        teacherService.delete(8);
 
     }
 }
