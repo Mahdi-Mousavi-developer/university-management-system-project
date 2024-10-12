@@ -1,9 +1,6 @@
 package data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Database {
     private static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/schoolmanagment";
@@ -19,6 +16,9 @@ public class Database {
     }
     public static Connection getConnectionStatic() throws SQLException{
         return DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+    }
+    public PreparedStatement getPreparedStatement(String sql) throws SQLException{
+        return this.getConnectionToDataBase().prepareStatement(sql);
     }
 
 }

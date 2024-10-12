@@ -13,6 +13,8 @@ import java.util.List;
 
 public class CourseRepositoryImpl {
     private Database database = new Database();
+
+
     private static Connection conn;
 
     static {
