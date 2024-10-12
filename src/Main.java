@@ -6,18 +6,19 @@ import service.TeacherServiceImpl;
 
 public class Main {
     public static void main (String[]args){
-   /*     ExamServiceImpl examService = new ExamServiceImpl();
+   /*
         examService.printAllExam();
         examService.PrintCountOfExam();
-        CourseServiceImpl courseService = new CourseServiceImpl();
-        courseService.printAllCourse();
-        courseService.printCountCourse()
         StudentServiceImpl student = new StudentServiceImpl();
         student.printCountOfStudent();
-        student.printAllStudentList();;*/
+        student.printAllStudentList();;
         TeacherServiceImpl teacherService = new TeacherServiceImpl();
         teacherService.printAllTeacher();
-        teacherService.delete(8);
+        teacherService.delete(6)
+        CourseServiceImpl courseService = new CourseServiceImpl();
+        courseService.delete(3);;*/
+        ExamServiceImpl examService = new ExamServiceImpl();
+        examService.delete(3);
 
     }
 }

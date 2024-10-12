@@ -1,5 +1,6 @@
 package service;
 
+import exception.ExamNotFindException;
 import modle.Exam;
 import modle.Student;
 import modle.dto.SaveExamRequest;
@@ -39,7 +40,7 @@ public class ExamServiceImpl {
         try {
             examRepository.deleteExam(id);
             printAllExam();
-        } catch (SQLException e) {
+        } catch (SQLException | ExamNotFindException e) {
             System.out.println("there is problem with connecting to database");
         }
     }

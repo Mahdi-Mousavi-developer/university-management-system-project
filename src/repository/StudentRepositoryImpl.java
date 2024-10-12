@@ -28,7 +28,7 @@ public class StudentRepositoryImpl {
     private static final String UPDATE_STUDENT = "update public.student set national_code=?,first_name=?,last_name=?,dob=?,gpu=?" +
             " where student_id=?";
     private static final String DELETE_STUDENT_COURSE = "delete from students_course where student_id = ?;";
-    private static final String DELETE_STUDENT_BY_ID_ = "delete from student where student_id = ?;";
+    private static final String DELETE_STUDENT_BY_ID = "delete from student where student_id = ?;";
     private static final String FIND_STUDENT_BY_ID = "select * from student where student_id = ?;";
     public List<Student> getAllStudent() throws SQLException {
         ResultSet studentResult = database.getSQLStatementS().executeQuery(GET_ALL_STUDENT_QUERY);
@@ -93,7 +93,7 @@ public class StudentRepositoryImpl {
             ps.setInt(1, studentId);
             ps.executeUpdate();
 
-            ps = conn.prepareStatement(DELETE_STUDENT_BY_ID_);
+            ps = conn.prepareStatement(DELETE_STUDENT_BY_ID);
             ps.setInt(1, studentId);
             ps.executeUpdate();
 

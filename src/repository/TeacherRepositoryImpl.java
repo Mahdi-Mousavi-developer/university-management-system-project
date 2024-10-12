@@ -26,8 +26,9 @@ public class TeacherRepositoryImpl {
             "values(?,?,?,?,?)";
     private static final String UPDATE_TEACHER = "update public.teachers set national_code=?,first_name=?,last_name=?,dob=?,course_id=?"+
             " where teacher_id=?";
+    private static final String UPDATE_EXAM_TABLE_FOR_DELETE_TEACHER = "update public.exam set teacher_id = null , national_code = null"+
+    " where teacher_id=?";
 
-    private static final String DELETE_TEACHER_EXAM = "delete from exam where teacher_id = ?;";
     private static final String DELETE_TEACHER_BY_ID_ = "delete from teachers where teacher_id = ?;";
     private static final String FIND_TEACHER_BY_ID = "select * from teachers where teacher_id = ?;";
 
@@ -87,7 +88,7 @@ public class TeacherRepositoryImpl {
 
     public void deleteTeacher(int teacherId) throws SQLException, TeacherNotFindException {
         if (this.findById(teacherId).isPresent()) {
-            PreparedStatement ps = conn.prepareStatement(DELETE_TEACHER_EXAM);
+            PreparedStatement ps = conn.prepareStatement(UPDATE_EXAM_TABLE_FOR_DELETE_TEACHER);
             ps.setInt(1, teacherId);
             ps.executeUpdate();
 

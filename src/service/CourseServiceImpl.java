@@ -1,5 +1,6 @@
 package service;
 
+import exception.StudentNotFindException;
 import modle.Course;
 
 import modle.dto.SaveCourseRequest;
@@ -35,7 +36,7 @@ public class CourseServiceImpl {
         try {
             courseRepository.deleteCourse(id);
             printAllCourse();
-        } catch (SQLException e) {
+        } catch (SQLException | StudentNotFindException e) {
             System.out.println("there is problem with connecting to database");
         }
     }
