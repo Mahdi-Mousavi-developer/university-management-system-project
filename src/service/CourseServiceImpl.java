@@ -14,7 +14,7 @@ public class CourseServiceImpl {
     private CourseRepositoryImpl courseRepository = new CourseRepositoryImpl();
     public  void printAllCourse(){
         try{
-            List<Course> courseList = courseRepository.getAllCourse();
+            List<Course> courseList = courseRepository.getAll();
             for (Course course:courseList)
             {
                 System.out.println(course);
@@ -25,7 +25,7 @@ public class CourseServiceImpl {
     }
     public void printCountCourse(){
         try{
-            int countOfCourse = courseRepository.getCountOfCourse();
+            int countOfCourse = courseRepository.getCount();
             System.out.println("number of all course : ".concat(String.valueOf(countOfCourse)));
         }catch (SQLException sqlException){
             System.out.println("there is problem with connecting to database");
@@ -34,21 +34,19 @@ public class CourseServiceImpl {
     public void delete (Integer id){
         checkIdCourse(id);
         try {
-            courseRepository.deleteCourse(id);
+            courseRepository.delete(id);
             printAllCourse();
-        } catch (SQLException | StudentNotFindException e) {
+        } catch (StudentNotFindException e) {
+            System.out.println(e.getMessage());
+        }catch (SQLException e){
             System.out.println("there is problem with connecting to database");
         }
     }
-    public  void checkIdCourse(Integer id){
-        if (id == null){
-            throw new IllegalArgumentException("course id can not be null");
-        }
-    }
+
     public void saveAndUpdate(SaveCourseRequest request) {
         checkCourse(request);
         try {
-            courseRepository.saveOrUpdateCourse(new Course(
+            courseRepository.saveOrUpdate(new Course(
                     request.getCourseId(),
                     request.getCourseTitle(),
                     request.getCourseUnite()
@@ -57,6 +55,20 @@ public class CourseServiceImpl {
             System.out.println("there is problem with connecting to database");
         }
 
+    }
+    public void addStudentsToCourse(int courseId , int studentId , String nationalCode){
+        try {
+            courseRepository.addStudentToCourse(courseId , studentId , nationalCode);
+        } catch (SQLException e) {
+            System.out.println("there is problem with connecting to database");
+        }
+    }
+
+
+    public  void checkIdCourse(Integer id){
+        if (id == null){
+            throw new IllegalArgumentException("course id can not be null");
+        }
     }
     public void checkCourse(SaveCourseRequest request) {
         if (request.getCourseTitle() == null) {

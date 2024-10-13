@@ -12,7 +12,7 @@ public class StudentServiceImpl {
     private StudentRepositoryImpl studentRepositoryImpl = new StudentRepositoryImpl();
     public  void printAllStudentList(){
         try{
-            List<Student> students = studentRepositoryImpl.getAllStudent();
+            List<Student> students = studentRepositoryImpl.getAll();
             for (Student student : students){
                 System.out.println(student);
             }
@@ -25,7 +25,7 @@ public class StudentServiceImpl {
 
     public void printCountOfStudent() {
         try {
-            int countStudent = studentRepositoryImpl.getCountOfStudent();
+            int countStudent = studentRepositoryImpl.getCount();
             System.out.println("number of student : ".concat(String.valueOf(countStudent)));
         }catch(SQLException sqlException){
             System.out.println("there is problem with connecting to database");
@@ -35,7 +35,7 @@ public class StudentServiceImpl {
     public void saveAndUpdate(SaveStudentRequest request) {
         checkStudent(request);
         try {
-            studentRepositoryImpl.saveOrUpdateStudent(new Student(
+            studentRepositoryImpl.saveOrUpdate(new Student(
                     request.getStudentId(),
                     request.getNationalCode(),
                     request.getFirstName(),
@@ -52,9 +52,11 @@ public class StudentServiceImpl {
     public void delete (Integer id){
         checkIdStudent(id);
         try {
-            studentRepositoryImpl.deleteStudent(id);
+            studentRepositoryImpl.delete(id);
             printAllStudentList();
-        } catch (SQLException | StudentNotFindException e) {
+        } catch (StudentNotFindException e) {
+            System.out.println(e.getMessage());
+        }catch (SQLException e){
             System.out.println("there is problem with connecting to database");
         }
     }

@@ -15,7 +15,7 @@ public class TeacherServiceImpl {
 
     public void printAllTeacher() {
         try {
-            List<Teacher> teacherList = teacherRepository.getAllTeacher();
+            List<Teacher> teacherList = teacherRepository.getAll();
             for (Teacher teacher : teacherList) {
                 System.out.println(teacher);
             }
@@ -27,7 +27,7 @@ public class TeacherServiceImpl {
     public void PrintCountTeacher() {
 
         try {
-            int countOfTeacher = teacherRepository.getCountOfTeacher();
+            int countOfTeacher = teacherRepository.getCount();
             System.out.println("number of teacher = ".concat(String.valueOf(countOfTeacher)));
         } catch (SQLException sqlException) {
             System.out.println("there is problem with connecting to database");
@@ -38,10 +38,12 @@ public class TeacherServiceImpl {
     public void delete(Integer id) {
         checkIdTeacher(id);
         try {
-            teacherRepository.deleteTeacher(id);
+            teacherRepository.delete(id);
             System.out.println("done");
             printAllTeacher();
-        } catch (SQLException | TeacherNotFindException e) {
+        } catch (TeacherNotFindException e) {
+            System.out.println(e.getMessage());
+        }catch (SQLException e){
             System.out.println("there is problem with connecting to database");
         }
     }
@@ -56,7 +58,7 @@ public class TeacherServiceImpl {
     public void saveAndUpdate(SaveTeacherRequest request) {
         checkTeacher(request);
         try {
-            teacherRepository.saveOrUpdateTeacher(new Teacher(
+            teacherRepository.saveOrUpdate(new Teacher(
                     request.getTeacherId(),
                     request.getNationalCode(),
                     request.getFirstName(),

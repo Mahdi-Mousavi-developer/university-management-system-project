@@ -3,14 +3,13 @@ package repository;
 import data.Database;
 import exception.ExamNotFindException;
 import modle.Exam;
-import modle.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ExamRepositoryImpl {
+public class ExamRepositoryImpl implements BaseRepository<Exam> {
     private Database database = new Database();
     private static Connection conn;
 
@@ -28,13 +27,16 @@ public class ExamRepositoryImpl {
             "values(?,?,?,?,?)";
     private static final String UPDATE_EXAM = "update public.exam set teacher_id=?,national_code=?,course_id=?,exam_grade=?,exam_date=?" +
             "where exam_id=?";
-    private static final String DELETE_EXAM_STUDENT= "delete from exams_students where exam_id = ?;";
+    private static final String DELETE_EXAM_STUDENT = "delete from exams_students where exam_id = ?;";
 
     private static final String DELETE_EXAM_BY_ID = "delete from exam where exam_id = ?;";
 
     private static final String FIND_COURSE_BY_ID = "select * from exam where exam_id=?";
+    private static final String ADD_EXAM_TO_STUDENT = "insert into public.exams_students (student_id,national_code,exam_id)" +
+            "values(?,?,?)";
 
-    public List<Exam> getAllExam() throws SQLException {
+    @Override
+    public List<Exam> getAll() throws SQLException {
         ResultSet examResult = database.getSQLStatementS().executeQuery(GET_ALL_EXAM_QUERY);
         List<Exam> examList = new ArrayList<>();
         while (examResult.next()) {
@@ -51,7 +53,8 @@ public class ExamRepositoryImpl {
         return examList;
     }
 
-    public int getCountOfExam() throws SQLException {
+    @Override
+    public int getCount() throws SQLException {
         ResultSet examSet = database.getSQLStatementS().executeQuery(GET_COUNT_OF_EXAM);
         int countOfExam = 0;
         while (examSet.next()) {
@@ -60,7 +63,8 @@ public class ExamRepositoryImpl {
         return countOfExam;
     }
 
-    public void saveOrUpdateExam(Exam exam) throws SQLException {
+    @Override
+    public void saveOrUpdate(Exam exam) throws SQLException {
         if (exam.getExamId() == null) {
             saveExam(exam);
         } else {
@@ -77,6 +81,7 @@ public class ExamRepositoryImpl {
         ps.setDate(5, new Date(exam.getExamDate().getTime()));
         ps.executeUpdate();
     }
+
     public void mergeExam(Exam exam) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(UPDATE_EXAM);
         ps.setLong(1, exam.getTeacherId());
@@ -84,39 +89,53 @@ public class ExamRepositoryImpl {
         ps.setLong(3, exam.getCourseId());
         ps.setDouble(4, exam.getExamGrade());
         ps.setDate(5, new Date(exam.getExamDate().getTime()));
-        ps.setInt(6,exam.getExamId());
+        ps.setInt(6, exam.getExamId());
         ps.executeUpdate();
     }
-    public void deleteExam(int examId) throws SQLException, ExamNotFindException{
-        if (findId(examId).isPresent()){
+
+    @Override
+    public void delete(int examId) throws SQLException, ExamNotFindException {
+        if (findById(examId).isPresent()) {
             PreparedStatement ps = conn.prepareStatement(DELETE_EXAM_STUDENT);
-            ps.setInt(1,examId);
+            ps.setInt(1, examId);
             ps.executeUpdate();
 
             ps = conn.prepareStatement(DELETE_EXAM_BY_ID);
-            ps.setInt(1 , examId);
+            ps.setInt(1, examId);
             ps.executeUpdate();
 
-        }else{
+        } else {
             throw new ExamNotFindException("this exam with this id is not exist");
         }
 
     }
-    public Optional<Exam> findId(int examId)throws  SQLException{
-       PreparedStatement ps = conn.prepareStatement(FIND_COURSE_BY_ID);
-       ps.setInt(1,examId);
-       ResultSet rs = ps.executeQuery();
+
+    @Override
+    public Optional<Exam> findById(int examId) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(FIND_COURSE_BY_ID);
+        ps.setInt(1, examId);
+        ResultSet rs = ps.executeQuery();
         Optional<Exam> optionalExam = Optional.empty();
-       while(rs.next()){
-           Exam exam = new Exam();
-           exam.setExamId(rs.getInt("exam_id"));
-           exam.setTeacherId(rs.getInt("teacher_id"));
-           exam.setNationalCode(rs.getString("national_code"));
-           exam.setCourseId(rs.getInt("course_id"));
-           exam.setExamGrade(rs.getLong("exam_grade"));
-           exam.setExamDate(rs.getDate("exam_date"));
-           optionalExam = Optional.of(exam) ;
-       }
-       return optionalExam;
+        while (rs.next()) {
+            Exam exam = new Exam();
+            exam.setExamId(rs.getInt("exam_id"));
+            exam.setTeacherId(rs.getInt("teacher_id"));
+            exam.setNationalCode(rs.getString("national_code"));
+            exam.setCourseId(rs.getInt("course_id"));
+            exam.setExamGrade(rs.getLong("exam_grade"));
+            exam.setExamDate(rs.getDate("exam_date"));
+            optionalExam = Optional.of(exam);
+        }
+        return optionalExam;
+    }
+
+    public void setAddExamToStudent(int studentId, String nationalCode, int examId) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(ADD_EXAM_TO_STUDENT);
+        ps.setInt(1, studentId);
+        ps.setString(2, nationalCode);
+        ps.setInt(3, examId);
+        ps.executeUpdate();
+
+
     }
 }

@@ -3,7 +3,6 @@ package repository;
 import data.Database;
 import exception.StudentNotFindException;
 import modle.Course;
-import modle.Student;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CourseRepositoryImpl {
+public class CourseRepositoryImpl implements BaseRepository<Course>{
     private Database database = new Database();
 
 
@@ -40,8 +39,10 @@ public class CourseRepositoryImpl {
     private static final String DELETE_COURSE_STUDENT = "delete from students_course where course_id = ?;";
     private static final String DELETE_COURSE_BY_ID = "delete from course where course_id = ?;";
     private static final String FIND_COURSE_BY_ID = "select * from course where course_id= ?;";
+    private static final String ADD_STUDENT_TO_COURSE = "insert into public.students_course (course_id, student_id , national_code)" +
+            "values(?,?,?)";
 
-    public List<Course> getAllCourse() throws SQLException {
+    public List<Course> getAll() throws SQLException {
         ResultSet courseResult = database.getSQLStatementS().executeQuery(GET_ALL_Course_QUERY);
         List<Course> courseList = new ArrayList<>();
         while (courseResult.next()) {
@@ -54,8 +55,8 @@ public class CourseRepositoryImpl {
         }
         return courseList;
     }
-
-    public int getCountOfCourse() throws SQLException {
+    @Override
+    public int getCount() throws SQLException {
         ResultSet courseResult = database.getSQLStatementS().executeQuery(GET_COUNT_OF_Course);
         int countOfCourse = 0;
         while (courseResult.next()) {
@@ -64,13 +65,15 @@ public class CourseRepositoryImpl {
         return countOfCourse;
     }
 
-    public void saveOrUpdateCourse(Course course) throws SQLException {
+    @Override
+    public void saveOrUpdate (Course course) throws SQLException {
         if (course.getCourseId() == null) {
             saveCourse(course);
         } else {
             mergeCourse(course);
         }
     }
+
 
     public void saveCourse(Course course) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(SAVE_COURSE);
@@ -87,7 +90,8 @@ public class CourseRepositoryImpl {
         ps.setInt(3, course.getCourseId());
         ps.executeUpdate();
     }
-    public void deleteCourse(int courseId) throws SQLException, StudentNotFindException {
+    @Override
+    public void delete(int courseId) throws SQLException, StudentNotFindException {
         if(this.findById(courseId).isPresent()) {
             PreparedStatement ps = database.getPreparedStatement(DELETE_COURSE_STUDENT);
             ps.setInt(1, courseId);
@@ -111,6 +115,7 @@ public class CourseRepositoryImpl {
 
 
     }
+    @Override
     public Optional<Course> findById(int courseId) throws SQLException{
         PreparedStatement ps = conn.prepareStatement(FIND_COURSE_BY_ID);
         ps.setInt(1, courseId);
@@ -127,5 +132,14 @@ public class CourseRepositoryImpl {
         return optionalCourse;
     }
 
+    public void addStudentToCourse(int courseId ,int studentId ,String nationalCode ) throws SQLException{
+        PreparedStatement ps = conn.prepareStatement(ADD_STUDENT_TO_COURSE);
+        ps.setInt(1,courseId);
+        ps.setInt(2,studentId);
+        ps.setString(3, nationalCode);
+        ps.executeUpdate();
 
- }
+    }
+
+
+}

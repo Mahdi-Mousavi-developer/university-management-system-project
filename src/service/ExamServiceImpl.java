@@ -2,9 +2,7 @@ package service;
 
 import exception.ExamNotFindException;
 import modle.Exam;
-import modle.Student;
 import modle.dto.SaveExamRequest;
-import modle.dto.SaveStudentRequest;
 import repository.ExamRepositoryImpl;
 
 import java.sql.SQLException;
@@ -15,7 +13,7 @@ public class ExamServiceImpl {
 
     public void printAllExam() {
         try {
-            List<Exam> examList = examRepository.getAllExam();
+            List<Exam> examList = examRepository.getAll();
             for (Exam exam : examList) {
                 System.out.println(exam);
             }
@@ -28,7 +26,7 @@ public class ExamServiceImpl {
 
     public void PrintCountOfExam() {
         try {
-            int countOfExam = examRepository.getCountOfExam();
+            int countOfExam = examRepository.getCount();
             System.out.println("number of all exam : ".concat(String.valueOf(countOfExam)));
         } catch (SQLException sqlException) {
             System.out.println("there is problem with connecting to database");
@@ -38,9 +36,11 @@ public class ExamServiceImpl {
     public void delete(Integer id) {
         checkIdExam(id);
         try {
-            examRepository.deleteExam(id);
+            examRepository.delete(id);
             printAllExam();
-        } catch (SQLException | ExamNotFindException e) {
+        } catch (ExamNotFindException e) {
+            System.out.println(e.getMessage());
+        }catch (SQLException e){
             System.out.println("there is problem with connecting to database");
         }
     }
@@ -53,7 +53,7 @@ public class ExamServiceImpl {
     public void saveAndUpdate(SaveExamRequest request) {
         checkExam(request);
         try {
-            examRepository.saveOrUpdateExam(new Exam(
+            examRepository.saveOrUpdate(new Exam(
                     request.getExamId(),
                     request.getTeacherId(),
                     request.getNationalCode(),
@@ -65,6 +65,13 @@ public class ExamServiceImpl {
             System.out.println("there is problem with connecting to database");
         }
 
+    }
+    public void addExamToStudent(int studentId , String nationalCode , int examId){
+        try{
+        examRepository.setAddExamToStudent(studentId , nationalCode , examId);
+         }catch (SQLException sqlException){
+            System.out.println("there is problem with connecting to database");
+         }
     }
     public void checkExam(SaveExamRequest request){
 

@@ -14,11 +14,11 @@ public class Main {
         student.printAllStudentList();;
         TeacherServiceImpl teacherService = new TeacherServiceImpl();
         teacherService.printAllTeacher();
-        teacherService.delete(6)
-        CourseServiceImpl courseService = new CourseServiceImpl();
-        courseService.delete(3);;*/
+        teacherService.delete(6);
+
         ExamServiceImpl examService = new ExamServiceImpl();
-        examService.delete(3);
+        examService.delete(15);*/CourseServiceImpl courseService = new CourseServiceImpl();
+        courseService.printAllCourse();
 
     }
 }

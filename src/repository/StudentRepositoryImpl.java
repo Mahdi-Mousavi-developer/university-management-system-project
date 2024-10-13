@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class StudentRepositoryImpl {
+public class StudentRepositoryImpl implements BaseRepository<Student> {
     private Database database = new Database();
     private static Connection conn;
 
@@ -30,7 +30,10 @@ public class StudentRepositoryImpl {
     private static final String DELETE_STUDENT_COURSE = "delete from students_course where student_id = ?;";
     private static final String DELETE_STUDENT_BY_ID = "delete from student where student_id = ?;";
     private static final String FIND_STUDENT_BY_ID = "select * from student where student_id = ?;";
-    public List<Student> getAllStudent() throws SQLException {
+
+
+    @Override
+    public List<Student> getAll() throws SQLException {
         ResultSet studentResult = database.getSQLStatementS().executeQuery(GET_ALL_STUDENT_QUERY);
         List<Student> students = new ArrayList<>();
         while (studentResult.next()) {
@@ -47,7 +50,8 @@ public class StudentRepositoryImpl {
         return students;
     }
 
-    public int getCountOfStudent() throws SQLException {
+    @Override
+    public int getCount() throws SQLException {
         ResultSet countResult = database.getSQLStatementS().executeQuery(GET_COUNT_OF_STUDENT);
         int studentCount = 0;
         while (countResult.next()) {
@@ -56,7 +60,8 @@ public class StudentRepositoryImpl {
         return studentCount;
     }
 
-    public void saveOrUpdateStudent(Student student) throws SQLException {
+    @Override
+    public void saveOrUpdate(Student student) throws SQLException {
         if (student.getStudentId() == null) {
             saveStudent(student);
         } else {
@@ -87,7 +92,8 @@ public class StudentRepositoryImpl {
 
     }
 
-    public void deleteStudent(int studentId) throws SQLException, StudentNotFindException {
+    @Override
+    public void delete(int studentId) throws SQLException, StudentNotFindException {
         if(this.findById(studentId).isPresent()) {
             PreparedStatement ps = conn.prepareStatement(DELETE_STUDENT_COURSE);
             ps.setInt(1, studentId);
@@ -103,6 +109,7 @@ public class StudentRepositoryImpl {
 
 
     }
+    @Override
     public Optional<Student>findById(int studentId) throws SQLException{
         PreparedStatement ps = conn.prepareStatement(FIND_STUDENT_BY_ID);
         ps.setInt(1,studentId);
