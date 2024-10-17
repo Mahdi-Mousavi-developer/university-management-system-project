@@ -11,6 +11,7 @@ public class Exam {
     private long examGrade;
     private Date examDate;
 
+
     public Exam() {
     }
 
@@ -22,6 +23,7 @@ public class Exam {
         this.examGrade = examGrade;
         this.examDate = examDate;
     }
+
 
     public Integer getExamId() {
         return examId;

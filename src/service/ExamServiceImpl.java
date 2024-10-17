@@ -60,6 +60,7 @@ public class ExamServiceImpl {
                     request.getCourseId(),
                     request.getExamGrade(),
                     request.getExamDate()
+
             ));
         } catch (SQLException e) {
             System.out.println("there is problem with connecting to database");
@@ -82,6 +83,38 @@ public class ExamServiceImpl {
         if ( request.getExamGrade()<0.0 || request.getExamGrade()>100.0){
             throw new IllegalArgumentException("put a number between 0 & 100 in this field");
 
+        }
+    }
+    public void GradeFinalized ( int examId){
+        try {
+            examRepository.gradeFinalizedMethod(examId);
+        } catch (SQLException e) {
+            System.out.println("there is problem with connecting to database");
+        }
+    }
+    public void changeGrade ( int newGrade ,int examId) {
+        try {
+            examRepository.changeGrade(newGrade , examId);
+        } catch (SQLException e) {
+            System.out.println("there is problem with connecting to database");
+        }
+    }
+    public void studentSeeHisGrade (int studentId){
+        try {
+            examRepository.studentSeeHisGrade(studentId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void printWhatStudentSee(int studentId) {
+        try {
+            double avg = examRepository.avgStudentGrade(studentId);
+            System.out.println(avg);
+            int[] whatStudentSee = examRepository.studentSeeHisGrade(studentId);
+            System.out.println("student id : "+whatStudentSee[0]+" national code : "+whatStudentSee[1]+" exam id :"+whatStudentSee[2]+" grade :"+whatStudentSee);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -16,9 +16,12 @@ public class Main {
         teacherService.printAllTeacher();
         teacherService.delete(6);
 
+        examService.delete(15);
+        CourseServiceImpl courseService = new CourseServiceImpl();
+        courseService.printAllCourse();*/
         ExamServiceImpl examService = new ExamServiceImpl();
-        examService.delete(15);*/CourseServiceImpl courseService = new CourseServiceImpl();
-        courseService.printAllCourse();
+
+        examService.printWhatStudentSee(2);
 
     }
 }

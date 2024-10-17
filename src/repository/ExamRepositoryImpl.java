@@ -34,7 +34,16 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
     private static final String FIND_COURSE_BY_ID = "select * from exam where exam_id=?";
     private static final String ADD_EXAM_TO_STUDENT = "insert into public.exams_students (student_id,national_code,exam_id)" +
             "values(?,?,?)";
-
+    private static final String SET_GRADE_FINALIZED = "update public.exams_students set grade_finalized = true " +
+            "where exam_id=?";
+    private static final String CHANGE_GRADE_FROM_STUDENT_EXAM_TABLE = "update public.exams_students set student_grade = ? " +
+            "where exam_id=?";
+    private static final String FINALIZED_GRADE_CHECK = "select grade_finalized from exams_students " +
+            "WHERE exam_id = ?";
+    private static final String STUDENT_SEE_HIS_GRADE = "select student_id ,national_code ,exam_id,student_grade from exams_students"+
+            " where student_id = ?";
+    private static final String STUDENT_SEE_HIS_AVG = "select AVG(student_grade) from exams_students"+
+            " where student_id = ?";
     @Override
     public List<Exam> getAll() throws SQLException {
         ResultSet examResult = database.getSQLStatementS().executeQuery(GET_ALL_EXAM_QUERY);
@@ -90,6 +99,7 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
         ps.setDouble(4, exam.getExamGrade());
         ps.setDate(5, new Date(exam.getExamDate().getTime()));
         ps.setInt(6, exam.getExamId());
+
         ps.executeUpdate();
     }
 
@@ -137,5 +147,57 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
         ps.executeUpdate();
 
 
+    }
+
+    public void gradeFinalizedMethod(int examId) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(SET_GRADE_FINALIZED);
+        ps.setInt(1, examId);
+        ps.executeUpdate();
+    }
+
+    public void changeGrade(int newGrade, int examId) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(FINALIZED_GRADE_CHECK);
+        ps.setInt(1, examId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Boolean finalized = rs.getBoolean("grade_finalized");
+            if (finalized == false) {
+                ps = conn.prepareStatement(CHANGE_GRADE_FROM_STUDENT_EXAM_TABLE);
+                ps.setInt(1, newGrade);
+                ps.setInt(2, examId);
+                ps.executeUpdate();
+            } else {
+                System.out.println("this grade is finalized and can not be change!!");
+            }
+        }
+    }
+    public int[] studentSeeHisGrade (int studentId) throws  SQLException{
+        PreparedStatement ps = conn.prepareStatement(STUDENT_SEE_HIS_GRADE);
+        ps.setInt(1,studentId);
+        ResultSet rs = ps.executeQuery();
+        int[] whatStudentSee = new int[4];
+        if (rs.next()){
+            int studentId1 = rs.getInt("student_id");
+            String nationalCode = rs.getString("national_code");
+            int nationalCode1 = Integer.parseInt(nationalCode);
+            int examId = rs.getInt("exam_id");
+            int grade = rs.getInt("student_grade");
+            whatStudentSee[0] =studentId1;
+            whatStudentSee[1]=nationalCode1;
+            whatStudentSee[2]= examId;
+            whatStudentSee[3]=grade;
+
+        } return whatStudentSee;
+
+    }
+    public double avgStudentGrade (int studentId) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(STUDENT_SEE_HIS_AVG);
+        ps.setInt(1, studentId);
+        ResultSet rs = ps.executeQuery();
+        double avg = 0;
+        if (rs.next()) {
+             avg = rs.getDouble("avg");
+        }
+            return avg;
     }
 }
