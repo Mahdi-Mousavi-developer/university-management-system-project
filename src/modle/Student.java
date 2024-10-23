@@ -17,6 +17,14 @@ public class Student {
     public Student() {
     }
 
+    public Student(String nationalCode, String firstName, String lastName, Date dob, double gpu) {
+        this.nationalCode = nationalCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.gpu = gpu;
+    }
+
     public Student(Integer studentId, String nationalCode, String firstName, String lastName, Date dob, double gpu) {
         this.studentId = studentId;
         this.nationalCode = nationalCode;

@@ -5,6 +5,11 @@ public class SaveCourseRequest {
     private String courseTitle;
     private long courseUnite;
 
+    public SaveCourseRequest(String courseTitle, long courseUnite) {
+        this.courseTitle = courseTitle;
+        this.courseUnite = courseUnite;
+    }
+
     public SaveCourseRequest(Integer courseId, String courseTitle, long courseUnite) {
         this.courseId = courseId;
         this.courseTitle = courseTitle;

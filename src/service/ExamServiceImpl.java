@@ -12,6 +12,10 @@ import java.util.List;
 public class ExamServiceImpl {
     private ExamRepositoryImpl examRepository = new ExamRepositoryImpl();
 
+    public ExamServiceImpl(ExamRepositoryImpl examRepository) {
+        this.examRepository = examRepository;
+    }
+
     public void printAllExam() {
         try {
             List<Exam> examList = examRepository.getAll();
@@ -86,16 +90,16 @@ public class ExamServiceImpl {
 
         }
     }
-    public void GradeFinalized ( int examId){
+    public void GradeFinalized ( int examId,int studentId){
         try {
             examRepository.gradeFinalizedMethod(examId);
         } catch (SQLException e) {
             System.out.println("there is problem with connecting to database");
         }
     }
-    public void changeGrade ( int newGrade ,int examId) {
+    public void changeGrade ( int newGrade ,int examId,int studentId) {
         try {
-            examRepository.changeGrade(newGrade , examId);
+            examRepository.changeGrade(newGrade , examId ,studentId);
         } catch (SQLException e) {
             System.out.println("there is problem with connecting to database");
         }
@@ -113,7 +117,7 @@ public class ExamServiceImpl {
    public void printWhatStudentSee(int studentId) {
         try {
             double avg = examRepository.avgStudentGrade(studentId);
-            System.out.println(avg);
+            System.out.println("your avg = "+avg);
             studentSeeHisGrade(studentId);
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -7,6 +7,11 @@ public class Course {
     private String courseTitle;
     private long courseUnite;
 
+    public Course(String courseTitle, long courseUnite) {
+        this.courseTitle = courseTitle;
+        this.courseUnite = courseUnite;
+    }
+
     public Course() {
     }
 

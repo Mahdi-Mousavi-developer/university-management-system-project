@@ -1,12 +1,14 @@
 import modle.Student;
-import service.CourseServiceImpl;
-import service.ExamServiceImpl;
-import service.StudentServiceImpl;
-import service.TeacherServiceImpl;
+import modle.Users;
+import service.*;
+
+import static java.awt.SystemColor.menu;
 
 public class Main {
     public static void main (String[]args){
-   /*
+   /* UsersServiceImpl usersService =new UsersServiceImpl();
+
+        usersService.logInUser("mmd","al");
         examService.printAllExam();
         examService.PrintCountOfExam();
         StudentServiceImpl student = new StudentServiceImpl();
@@ -16,12 +18,10 @@ public class Main {
         teacherService.printAllTeacher();
         teacherService.delete(6);
         TeacherServiceImpl teacherService = new TeacherServiceImpl();
-
+        ExamServiceImpl examService = new ExamServiceImpl();
         examService.delete(2);
-
         CourseServiceImpl courseService = new CourseServiceImpl();
         courseService.printAllCourse();*/
-        ExamServiceImpl examService = new ExamServiceImpl();
-        examService.printWhatStudentSee(2);
+        util.menu.mainMenu();
     }
 }

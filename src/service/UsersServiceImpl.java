@@ -2,6 +2,7 @@ package service;
 
 import exception.StudentNotFindException;
 import exception.UsersNotFindException;
+import exception.uniqUsernameException;
 import modle.Course;
 import modle.Users;
 import modle.dto.SaveCourseRequest;
@@ -10,22 +11,26 @@ import repository.UsersRepository;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class UsersServiceImpl {
 
     private UsersRepository usersRepository = new UsersRepository();
 
-    public void saveAndUpdate(Users users) {
-        checkUsers(users);
+    public UsersServiceImpl(UsersRepository usersRepository) {
+    }
+
+    public void createUser(String username , String password , String userRole)throws uniqUsernameException {
         try {
-            usersRepository.saveOrUpdate(new Users(
-                    users.getUserId(),
-                    users.getUsername(),
-                    users.getUsername(),
-                    users.getUserRole()
-            ));
+            Users user =new Users();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setUserRole(userRole);
+            usersRepository.saveUsers(user);
         } catch (SQLException e) {
             System.out.println("there is problem with connecting to database");
+        }catch (uniqUsernameException uniq){
+            System.out.println(uniq.getMessage());
         }
     }
 
@@ -62,8 +67,22 @@ public class UsersServiceImpl {
         } catch (UsersNotFindException e) {
             System.out.println(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("there is problem with connecting to database");
+
         }
 
+    }
+    public String logInUser(String username,String password)throws UsersNotFindException{
+
+        try {
+            Optional<Users> foundUser = usersRepository.findByUsernameAndPass(username ,password);
+            if(!foundUser.isPresent())
+                throw new UsersNotFindException("username or password is wrong");
+
+            return foundUser.get().getUserRole();
+
+
+        } catch (SQLException  e) {
+            throw new RuntimeException(e);
+        }
     }
 }

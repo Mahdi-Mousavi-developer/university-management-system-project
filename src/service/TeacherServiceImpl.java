@@ -13,6 +13,10 @@ import java.util.List;
 public class TeacherServiceImpl {
     private TeacherRepositoryImpl teacherRepository = new TeacherRepositoryImpl();
 
+    public TeacherServiceImpl(TeacherRepositoryImpl teacherRepository) {
+        this.teacherRepository = teacherRepository;
+    }
+
     public void printAllTeacher() {
         try {
             List<Teacher> teacherList = teacherRepository.getAll();

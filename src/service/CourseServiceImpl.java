@@ -12,6 +12,11 @@ import java.util.List;
 
 public class CourseServiceImpl {
     private CourseRepositoryImpl courseRepository = new CourseRepositoryImpl();
+
+    public CourseServiceImpl(CourseRepositoryImpl courseRepository) {
+        this.courseRepository = courseRepository;
+    }
+
     public  void printAllCourse(){
         try{
             List<Course> courseList = courseRepository.getAll();

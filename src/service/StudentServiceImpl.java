@@ -10,6 +10,11 @@ import java.util.List;
 
 public class StudentServiceImpl {
     private StudentRepositoryImpl studentRepositoryImpl = new StudentRepositoryImpl();
+
+    public StudentServiceImpl(StudentRepositoryImpl studentRepositoryImpl) {
+        this.studentRepositoryImpl = studentRepositoryImpl;
+    }
+
     public  void printAllStudentList(){
         try{
             List<Student> students = studentRepositoryImpl.getAll();

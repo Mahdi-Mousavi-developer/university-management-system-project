@@ -39,9 +39,9 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
     private static final String SET_GRADE_FINALIZED = "update public.exams_students set grade_finalized = true " +
             "where exam_id=?";
     private static final String CHANGE_GRADE_FROM_STUDENT_EXAM_TABLE = "update public.exams_students set student_grade = ? " +
-            "where exam_id=?";
+            "where exam_id=? and student_id = ?";
     private static final String FINALIZED_GRADE_CHECK = "select grade_finalized from exams_students " +
-            "WHERE exam_id = ?";
+            "WHERE exam_id = ? and student_id = ?";
     private static final String STUDENT_SEE_HIS_GRADE = "select student_id ,national_code ,exam_id,student_grade from exams_students" +
             " where student_id = ?";
     private static final String STUDENT_SEE_HIS_AVG = "select AVG(student_grade) from exams_students" +
@@ -158,9 +158,10 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
         ps.executeUpdate();
     }
 
-    public void changeGrade(int newGrade, int examId) throws SQLException {
+    public void changeGrade(int newGrade, int examId,int studentId) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(FINALIZED_GRADE_CHECK);
         ps.setInt(1, examId);
+        ps.setInt(2,studentId);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             Boolean finalized = rs.getBoolean("grade_finalized");
@@ -168,6 +169,7 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
                 ps = conn.prepareStatement(CHANGE_GRADE_FROM_STUDENT_EXAM_TABLE);
                 ps.setInt(1, newGrade);
                 ps.setInt(2, examId);
+                ps.setInt(3,studentId);
                 ps.executeUpdate();
             } else {
                 System.out.println("this grade is finalized and can not be change!!");

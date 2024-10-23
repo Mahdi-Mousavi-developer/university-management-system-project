@@ -10,6 +10,14 @@ public class SaveTeacherRequest {
     private Date dob;
     private long courseId;
 
+    public SaveTeacherRequest(String nationalCode, String firstName, String lastName, Date dob, long courseId) {
+        this.nationalCode = nationalCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.courseId = courseId;
+    }
+
     public SaveTeacherRequest(Integer teacherId, String nationalCode, String firstName, String lastName, Date dob, long courseId) {
         this.teacherId = teacherId;
         this.nationalCode = nationalCode;

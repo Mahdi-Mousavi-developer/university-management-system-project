@@ -15,6 +15,14 @@ public class Exam {
     public Exam() {
     }
 
+    public Exam(Integer teacherId, String nationalCode, Integer courseId, long examGrade, Date examDate) {
+        this.teacherId = teacherId;
+        this.nationalCode = nationalCode;
+        this.courseId = courseId;
+        this.examGrade = examGrade;
+        this.examDate = examDate;
+    }
+
     public Exam(Integer examId, Integer teacherId, String nationalCode, Integer courseId, long examGrade, Date examDate) {
         this.examId = examId;
         this.teacherId = teacherId;

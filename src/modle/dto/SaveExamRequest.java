@@ -10,7 +10,13 @@ public class SaveExamRequest {
     private long examGrade;
     private Date examDate;
 
-
+    public SaveExamRequest(Integer teacherId, String nationalCode, Integer courseId, long examGrade, Date examDate) {
+        this.teacherId = teacherId;
+        this.nationalCode = nationalCode;
+        this.courseId = courseId;
+        this.examGrade = examGrade;
+        this.examDate = examDate;
+    }
 
     public SaveExamRequest(Integer examId, Integer teacherId, String nationalCode, Integer courseId, long examGrade, Date examDate) {
         this.examId = examId;

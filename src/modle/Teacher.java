@@ -11,6 +11,14 @@ public class Teacher {
     private Date dob;
     private long courseId;
 
+    public Teacher(String nationalCode, String firstName, String lastName, Date dob, long courseId) {
+        this.nationalCode = nationalCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.courseId = courseId;
+    }
+
     public Teacher(Integer teacherId, String nationalCode, String firstName, String lastName, Date dob, long courseId) {
         this.teacherId = teacherId;
         this.nationalCode = nationalCode;
