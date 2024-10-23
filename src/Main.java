@@ -15,13 +15,13 @@ public class Main {
         TeacherServiceImpl teacherService = new TeacherServiceImpl();
         teacherService.printAllTeacher();
         teacherService.delete(6);
+        TeacherServiceImpl teacherService = new TeacherServiceImpl();
 
-        examService.delete(15);
+        examService.delete(2);
+
         CourseServiceImpl courseService = new CourseServiceImpl();
         courseService.printAllCourse();*/
         ExamServiceImpl examService = new ExamServiceImpl();
-
         examService.printWhatStudentSee(2);
-
     }
 }

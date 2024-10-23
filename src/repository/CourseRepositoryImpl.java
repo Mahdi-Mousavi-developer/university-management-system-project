@@ -93,7 +93,7 @@ public class CourseRepositoryImpl implements BaseRepository<Course>{
     @Override
     public void delete(int courseId) throws SQLException, StudentNotFindException {
         if(this.findById(courseId).isPresent()) {
-            PreparedStatement ps = database.getPreparedStatement(DELETE_COURSE_STUDENT);
+            PreparedStatement ps = conn.prepareStatement(DELETE_COURSE_STUDENT);
             ps.setInt(1, courseId);
             ps.executeUpdate();
 

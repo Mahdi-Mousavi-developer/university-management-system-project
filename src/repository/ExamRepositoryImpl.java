@@ -3,6 +3,7 @@ package repository;
 import data.Database;
 import exception.ExamNotFindException;
 import modle.Exam;
+import modle.dto.SeeStudentRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
     }
 
     private static final String GET_ALL_EXAM_QUERY = "SELECT * FROM exam;";
+    private static final String GET_ALL_EXAM_STUDENT ="select * from exams_students";
     private static final String GET_COUNT_OF_EXAM = "SELECT count(*) FROM exam;";
     private static final String SAVE_EXAM = "insert into public.exam (teacher_id,national_code,course_id,exam_grade,exam_date)" +
             "values(?,?,?,?,?)";
@@ -40,10 +42,11 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
             "where exam_id=?";
     private static final String FINALIZED_GRADE_CHECK = "select grade_finalized from exams_students " +
             "WHERE exam_id = ?";
-    private static final String STUDENT_SEE_HIS_GRADE = "select student_id ,national_code ,exam_id,student_grade from exams_students"+
+    private static final String STUDENT_SEE_HIS_GRADE = "select student_id ,national_code ,exam_id,student_grade from exams_students" +
             " where student_id = ?";
-    private static final String STUDENT_SEE_HIS_AVG = "select AVG(student_grade) from exams_students"+
+    private static final String STUDENT_SEE_HIS_AVG = "select AVG(student_grade) from exams_students" +
             " where student_id = ?";
+
     @Override
     public List<Exam> getAll() throws SQLException {
         ResultSet examResult = database.getSQLStatementS().executeQuery(GET_ALL_EXAM_QUERY);
@@ -171,33 +174,33 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
             }
         }
     }
-    public int[] studentSeeHisGrade (int studentId) throws  SQLException{
+    public List<SeeStudentRequest> studentSeeHisGrade (int studentId) throws  SQLException {
         PreparedStatement ps = conn.prepareStatement(STUDENT_SEE_HIS_GRADE);
-        ps.setInt(1,studentId);
+        ps.setInt(1, studentId);
         ResultSet rs = ps.executeQuery();
-        int[] whatStudentSee = new int[4];
-        if (rs.next()){
-            int studentId1 = rs.getInt("student_id");
-            String nationalCode = rs.getString("national_code");
-            int nationalCode1 = Integer.parseInt(nationalCode);
-            int examId = rs.getInt("exam_id");
-            int grade = rs.getInt("student_grade");
-            whatStudentSee[0] =studentId1;
-            whatStudentSee[1]=nationalCode1;
-            whatStudentSee[2]= examId;
-            whatStudentSee[3]=grade;
-
-        } return whatStudentSee;
-
+        List<SeeStudentRequest> seeStudentRequestList = new ArrayList<>();
+        while (rs.next()) {
+            SeeStudentRequest seeStudentRequest = new SeeStudentRequest();
+            seeStudentRequest.setStudentId(rs.getInt("student_id"));
+            seeStudentRequest.setNationalCode(rs.getString("national_code"));
+            seeStudentRequest.setExamId(rs.getInt("exam_id"));
+            seeStudentRequest.setStudentGrade(rs.getInt("student_grade"));
+            seeStudentRequestList.add(seeStudentRequest);
+        }
+        return seeStudentRequestList;
     }
-    public double avgStudentGrade (int studentId) throws SQLException {
+
+
+    public double avgStudentGrade(int studentId) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(STUDENT_SEE_HIS_AVG);
         ps.setInt(1, studentId);
         ResultSet rs = ps.executeQuery();
         double avg = 0;
         if (rs.next()) {
-             avg = rs.getDouble("avg");
+            avg = rs.getDouble("avg");
         }
-            return avg;
+        return avg;
     }
+
 }
+

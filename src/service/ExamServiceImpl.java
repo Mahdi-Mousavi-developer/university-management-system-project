@@ -3,6 +3,7 @@ package service;
 import exception.ExamNotFindException;
 import modle.Exam;
 import modle.dto.SaveExamRequest;
+import modle.dto.SeeStudentRequest;
 import repository.ExamRepositoryImpl;
 
 import java.sql.SQLException;
@@ -101,18 +102,19 @@ public class ExamServiceImpl {
     }
     public void studentSeeHisGrade (int studentId){
         try {
-            examRepository.studentSeeHisGrade(studentId);
+          List<SeeStudentRequest> seeStudentRequestList=examRepository.studentSeeHisGrade(studentId);
+            for (SeeStudentRequest see:seeStudentRequestList) {
+                System.out.println(see);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    public void printWhatStudentSee(int studentId) {
+   public void printWhatStudentSee(int studentId) {
         try {
             double avg = examRepository.avgStudentGrade(studentId);
             System.out.println(avg);
-            int[] whatStudentSee = examRepository.studentSeeHisGrade(studentId);
-            System.out.println("student id : "+whatStudentSee[0]+" national code : "+whatStudentSee[1]+" exam id :"+whatStudentSee[2]+" grade :"+whatStudentSee);
-
+            studentSeeHisGrade(studentId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

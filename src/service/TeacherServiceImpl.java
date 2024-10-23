@@ -81,5 +81,12 @@ public class TeacherServiceImpl {
         }
 
     }
+    public void setTeacherForCourse(int courseId ,int teacherId){
+        try {
+            teacherRepository.setTeacherForCourse(courseId,teacherId);
+        } catch (SQLException e) {
+            System.out.println("there is problem with connecting to database");
+        }
+    }
 
 }

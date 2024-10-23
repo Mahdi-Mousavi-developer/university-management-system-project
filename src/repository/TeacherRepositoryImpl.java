@@ -30,6 +30,8 @@ public class TeacherRepositoryImpl implements BaseRepository<Teacher> {
 
     private static final String DELETE_TEACHER_BY_ID_ = "delete from teachers where teacher_id = ?;";
     private static final String FIND_TEACHER_BY_ID = "select * from teachers where teacher_id = ?;";
+    private static final String SET_COURSE_ID = "update public.teachers set course_id=? " +
+            " where teacher_id = ?";
 
 
     @Override
@@ -126,6 +128,10 @@ public class TeacherRepositoryImpl implements BaseRepository<Teacher> {
 
 
 
-
-
-}
+    public void setTeacherForCourse(int courseId ,int teacherId) throws SQLException {
+        PreparedStatement ps = database.getPreparedStatement(SET_COURSE_ID);
+        ps.setInt(1,courseId);
+        ps.setInt(2,teacherId);
+        ps.executeUpdate();
+        }
+    }
