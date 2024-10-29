@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class UsersRepository implements BaseRepository<Users> {
-    Database database= new Database();
+    Database database = new Database();
     Users users = new Users();
     private static Connection conn;
 
@@ -35,12 +35,12 @@ public class UsersRepository implements BaseRepository<Users> {
     private static final String DELETE_USER_BY_ID = "delete from userss where id = ?;";
     private static final String FIND_USER_BY_USERNAME_AND_PASSWORD = "select * from userss where username =? and password= ?";
 
-    private static final String COUNT_OF_USER_BY_USERNAME ="SELECT count(*) from userss where username = ?" ;
+    private static final String COUNT_OF_USER_BY_USERNAME = "SELECT count(*) from userss where username = ?";
     private static final String FIND_USER_BY_ID = "select * from userss where id= ?;";
     private static final String GET_COUNT = "select count(*) from userss";
 
     @Override
-    public void saveOrUpdate (Users users) throws SQLException {
+    public void saveOrUpdate(Users users) throws SQLException {
         if (users.getUserId() == null) {
             try {
                 saveUsers(users);
@@ -53,15 +53,15 @@ public class UsersRepository implements BaseRepository<Users> {
     }
 
 
-    public void saveUsers(Users users) throws SQLException ,uniqUsernameException {
-        int count =countUserForChecking(users.getUsername());
-        if (count==0) {
+    public void saveUsers(Users users) throws SQLException, uniqUsernameException {
+        int count = countUserForChecking(users.getUsername());
+        if (count == 0) {
             PreparedStatement ps = conn.prepareStatement(SAVE_USER);
             ps.setString(1, users.getUsername());
             ps.setString(2, users.getPassword());
             ps.setString(3, users.getUserRole());
             ps.executeUpdate();
-        } else if (count>0) {
+        } else if (count > 0) {
             throw new uniqUsernameException("user already exit");
         }
 
@@ -74,16 +74,17 @@ public class UsersRepository implements BaseRepository<Users> {
         ps.setString(3, users.getUserRole());
         ps.executeUpdate();
     }
+
     @Override
     public List<Users> getAll() throws SQLException {
         ResultSet rs = database.getSQLStatementS().executeQuery(GET_ALL_Users_QUERY);
         List<Users> usersList = new ArrayList<>();
         while (rs.next()) {
             Users users = new Users(
-                rs.getInt("id"),
-                rs.getString("username"),
-                rs.getString("password"),
-                rs.getString("user_role")
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("user_role")
             );
             usersList.add(users);
         }
@@ -103,10 +104,10 @@ public class UsersRepository implements BaseRepository<Users> {
     }
 
     @Override
-    public  void delete(int id) throws SQLException, UsersNotFindException {
-        if (this.findById(id).isPresent()){
+    public void delete(int id) throws SQLException, UsersNotFindException {
+        if (this.findById(id).isPresent()) {
             PreparedStatement ps = conn.prepareStatement(DELETE_USER_BY_ID);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ps.executeUpdate();
         }
     }
@@ -114,10 +115,10 @@ public class UsersRepository implements BaseRepository<Users> {
     @Override
     public Optional<Users> findById(int id) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(FIND_USER_BY_ID);
-        ps.setInt(1,id);
-        ResultSet rs =ps.executeQuery();
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
         Optional<Users> optionalUsers = Optional.empty();
-        while(rs.next()){
+        while (rs.next()) {
             Users user = new Users();
             user.setUserId(rs.getInt("id"));
             user.setUsername(rs.getString("username"));
@@ -127,30 +128,32 @@ public class UsersRepository implements BaseRepository<Users> {
         }
         return optionalUsers;
     }
-    public Optional<Users> findByUsernameAndPass(String username , String password)throws SQLException{
-        PreparedStatement ps =conn.prepareStatement(FIND_USER_BY_USERNAME_AND_PASSWORD);
-        ps.setString(1,username);
-        ps.setString(2,password);
-        ResultSet rs =ps.executeQuery();
+
+    public Optional<Users> findByUsernameAndPass(String username, String password) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(FIND_USER_BY_USERNAME_AND_PASSWORD);
+        ps.setString(1, username);
+        ps.setString(2, password);
+        ResultSet rs = ps.executeQuery();
         Optional<Users> foundUser = Optional.empty();
-        if(rs.next()){
-            Users users1 =new Users();
-           users1.setUserId(rs.getInt("id"));
-           users1.setUsername( rs.getString("username"));
-           users1.setPassword(  rs.getString("password"));
-           users1.setUserRole( rs.getString("user_role"));
-        foundUser =Optional.of(users1);
+        if (rs.next()) {
+            Users users1 = new Users();
+            users1.setUserId(rs.getInt("id"));
+            users1.setUsername(rs.getString("username"));
+            users1.setPassword(rs.getString("password"));
+            users1.setUserRole(rs.getString("user_role"));
+            foundUser = Optional.of(users1);
         }
 
         return foundUser;
     }
-    public int countUserForChecking(String username)throws SQLException{
+
+    public int countUserForChecking(String username) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(COUNT_OF_USER_BY_USERNAME);
-        ps.setString(1,username);
-        ResultSet rs =ps.executeQuery();
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
         int count = 0;
-        if (rs.next()){
-            count =rs.getInt("count");
+        if (rs.next()) {
+            count = rs.getInt("count");
         }
         return count;
     }

@@ -15,13 +15,13 @@ public class StudentServiceImpl {
         this.studentRepositoryImpl = studentRepositoryImpl;
     }
 
-    public  void printAllStudentList(){
-        try{
+    public void printAllStudentList() {
+        try {
             List<Student> students = studentRepositoryImpl.getAll();
-            for (Student student : students){
+            for (Student student : students) {
                 System.out.println(student);
             }
-        }catch (SQLException sqlException){
+        } catch (SQLException sqlException) {
             System.out.println("there is problem with connecting to database");
         }
 
@@ -32,7 +32,7 @@ public class StudentServiceImpl {
         try {
             int countStudent = studentRepositoryImpl.getCount();
             System.out.println("number of student : ".concat(String.valueOf(countStudent)));
-        }catch(SQLException sqlException){
+        } catch (SQLException sqlException) {
             System.out.println("there is problem with connecting to database");
         }
     }
@@ -54,31 +54,33 @@ public class StudentServiceImpl {
 
     }
 
-    public void delete (Integer id){
+    public void delete(Integer id) {
         checkIdStudent(id);
         try {
             studentRepositoryImpl.delete(id);
             printAllStudentList();
         } catch (StudentNotFindException e) {
             System.out.println(e.getMessage());
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("there is problem with connecting to database");
         }
     }
-    public  void checkIdStudent(Integer id){
-        if (id == null){
+
+    public void checkIdStudent(Integer id) {
+        if (id == null) {
             throw new IllegalArgumentException("student id can not be null");
         }
     }
-    public void checkStudent(SaveStudentRequest request){
-        if (request.getFirstName()==null|| request.getLastName()==null){
+
+    public void checkStudent(SaveStudentRequest request) {
+        if (request.getFirstName() == null || request.getLastName() == null) {
             throw new IllegalArgumentException("first name or last name can not be null please input something there bro");
         }
-        if (request.getNationalCode()==null){
+        if (request.getNationalCode() == null) {
             throw new IllegalArgumentException("national code can not be null please input something there bro");
 
         }
-        if ( request.getGpu()<0.0 || request.getGpu()>100.0){
+        if (request.getGpu() < 0.0 || request.getGpu() > 100.0) {
             throw new IllegalArgumentException("put a number between 0 & 100 in this field");
 
         }

@@ -20,16 +20,16 @@ public class UsersServiceImpl {
     public UsersServiceImpl(UsersRepository usersRepository) {
     }
 
-    public void createUser(String username , String password , String userRole)throws uniqUsernameException {
+    public void createUser(String username, String password, String userRole) throws uniqUsernameException {
         try {
-            Users user =new Users();
+            Users user = new Users();
             user.setUsername(username);
             user.setPassword(password);
             user.setUserRole(userRole);
             usersRepository.saveUsers(user);
         } catch (SQLException e) {
             System.out.println("there is problem with connecting to database");
-        }catch (uniqUsernameException uniq){
+        } catch (uniqUsernameException uniq) {
             System.out.println(uniq.getMessage());
         }
     }
@@ -71,17 +71,18 @@ public class UsersServiceImpl {
         }
 
     }
-    public String logInUser(String username,String password)throws UsersNotFindException{
+
+    public String logInUser(String username, String password) throws UsersNotFindException {
 
         try {
-            Optional<Users> foundUser = usersRepository.findByUsernameAndPass(username ,password);
-            if(!foundUser.isPresent())
+            Optional<Users> foundUser = usersRepository.findByUsernameAndPass(username, password);
+            if (!foundUser.isPresent())
                 throw new UsersNotFindException("username or password is wrong");
 
             return foundUser.get().getUserRole();
 
 
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

@@ -20,6 +20,7 @@ public class TeacherServiceImpl {
     public void printAllTeacher() {
         try {
             List<Teacher> teacherList = teacherRepository.getAll();
+            System.out.println("***If the course id is equal to 0, it means this teacher dont have any course***");
             for (Teacher teacher : teacherList) {
                 System.out.println(teacher);
             }
@@ -47,7 +48,7 @@ public class TeacherServiceImpl {
             printAllTeacher();
         } catch (TeacherNotFindException e) {
             System.out.println(e.getMessage());
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("there is problem with connecting to database");
         }
     }
@@ -59,6 +60,7 @@ public class TeacherServiceImpl {
 
 
     }
+
     public void saveAndUpdate(SaveTeacherRequest request) {
         checkTeacher(request);
         try {
@@ -75,19 +77,21 @@ public class TeacherServiceImpl {
         }
 
     }
-    public void checkTeacher(SaveTeacherRequest request){
-        if (request.getFirstName()==null|| request.getLastName()==null){
+
+    public void checkTeacher(SaveTeacherRequest request) {
+        if (request.getFirstName() == null || request.getLastName() == null) {
             throw new IllegalArgumentException("first name or last name can not be null please input something there bro");
         }
-        if (request.getNationalCode()==null){
+        if (request.getNationalCode() == null) {
             throw new IllegalArgumentException("national code can not be null please input something there bro");
 
         }
 
     }
-    public void setTeacherForCourse(int courseId ,int teacherId){
+
+    public void setTeacherForCourse(int courseId, int teacherId) {
         try {
-            teacherRepository.setTeacherForCourse(courseId,teacherId);
+            teacherRepository.setTeacherForCourse(courseId, teacherId);
         } catch (SQLException e) {
             System.out.println("there is problem with connecting to database");
         }

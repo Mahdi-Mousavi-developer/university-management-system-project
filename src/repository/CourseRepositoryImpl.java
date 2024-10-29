@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CourseRepositoryImpl implements BaseRepository<Course>{
+public class CourseRepositoryImpl implements BaseRepository<Course> {
     private Database database = new Database();
 
 
@@ -55,6 +55,7 @@ public class CourseRepositoryImpl implements BaseRepository<Course>{
         }
         return courseList;
     }
+
     @Override
     public int getCount() throws SQLException {
         ResultSet courseResult = database.getSQLStatementS().executeQuery(GET_COUNT_OF_Course);
@@ -66,7 +67,7 @@ public class CourseRepositoryImpl implements BaseRepository<Course>{
     }
 
     @Override
-    public void saveOrUpdate (Course course) throws SQLException {
+    public void saveOrUpdate(Course course) throws SQLException {
         if (course.getCourseId() == null) {
             saveCourse(course);
         } else {
@@ -90,9 +91,10 @@ public class CourseRepositoryImpl implements BaseRepository<Course>{
         ps.setInt(3, course.getCourseId());
         ps.executeUpdate();
     }
+
     @Override
     public void delete(int courseId) throws SQLException, StudentNotFindException {
-        if(this.findById(courseId).isPresent()) {
+        if (this.findById(courseId).isPresent()) {
             PreparedStatement ps = conn.prepareStatement(DELETE_COURSE_STUDENT);
             ps.setInt(1, courseId);
             ps.executeUpdate();
@@ -109,19 +111,20 @@ public class CourseRepositoryImpl implements BaseRepository<Course>{
             ps.setInt(1, courseId);
             ps.executeUpdate();
 
-        }else{
+        } else {
             throw new StudentNotFindException("Student with id".concat(String.valueOf(courseId)).concat(" not found"));
         }
 
 
     }
+
     @Override
-    public Optional<Course> findById(int courseId) throws SQLException{
+    public Optional<Course> findById(int courseId) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(FIND_COURSE_BY_ID);
         ps.setInt(1, courseId);
         ResultSet rs = ps.executeQuery();
         Optional<Course> optionalCourse = Optional.empty();
-        while (rs.next()){
+        while (rs.next()) {
             Course course = new Course();
             course.setCourseId(rs.getInt("course_id"));
             course.setCourseTitle(rs.getString("course_title"));
@@ -132,10 +135,10 @@ public class CourseRepositoryImpl implements BaseRepository<Course>{
         return optionalCourse;
     }
 
-    public void addStudentToCourse(int courseId ,int studentId ,String nationalCode ) throws SQLException{
+    public void addStudentToCourse(int courseId, int studentId, String nationalCode) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(ADD_STUDENT_TO_COURSE);
-        ps.setInt(1,courseId);
-        ps.setInt(2,studentId);
+        ps.setInt(1, courseId);
+        ps.setInt(2, studentId);
         ps.setString(3, nationalCode);
         ps.executeUpdate();
 

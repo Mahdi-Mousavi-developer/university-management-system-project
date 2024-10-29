@@ -94,7 +94,7 @@ public class StudentRepositoryImpl implements BaseRepository<Student> {
 
     @Override
     public void delete(int studentId) throws SQLException, StudentNotFindException {
-        if(this.findById(studentId).isPresent()) {
+        if (this.findById(studentId).isPresent()) {
             PreparedStatement ps = conn.prepareStatement(DELETE_STUDENT_COURSE);
             ps.setInt(1, studentId);
             ps.executeUpdate();
@@ -103,19 +103,20 @@ public class StudentRepositoryImpl implements BaseRepository<Student> {
             ps.setInt(1, studentId);
             ps.executeUpdate();
 
-        }else{
+        } else {
             throw new StudentNotFindException("Student with id".concat(String.valueOf(studentId)).concat(" not found"));
         }
 
 
     }
+
     @Override
-    public Optional<Student>findById(int studentId) throws SQLException{
+    public Optional<Student> findById(int studentId) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(FIND_STUDENT_BY_ID);
-        ps.setInt(1,studentId);
+        ps.setInt(1, studentId);
         ResultSet rs = ps.executeQuery();
         Optional<Student> optionalStudent = Optional.empty();
-        while (rs.next()){
+        while (rs.next()) {
             Student student = new Student();
             student.setStudentId(rs.getInt("student_id"));
             student.setNationalCode(rs.getString("national_code"));

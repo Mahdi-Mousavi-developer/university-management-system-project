@@ -23,7 +23,7 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
     }
 
     private static final String GET_ALL_EXAM_QUERY = "SELECT * FROM exam;";
-    private static final String GET_ALL_EXAM_STUDENT ="select * from exams_students";
+    private static final String GET_ALL_EXAM_STUDENT = "select * from exams_students";
     private static final String GET_COUNT_OF_EXAM = "SELECT count(*) FROM exam;";
     private static final String SAVE_EXAM = "insert into public.exam (teacher_id,national_code,course_id,exam_grade,exam_date)" +
             "values(?,?,?,?,?)";
@@ -158,10 +158,10 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
         ps.executeUpdate();
     }
 
-    public void changeGrade(int newGrade, int examId,int studentId) throws SQLException {
+    public void changeGrade(int newGrade, int examId, int studentId) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(FINALIZED_GRADE_CHECK);
         ps.setInt(1, examId);
-        ps.setInt(2,studentId);
+        ps.setInt(2, studentId);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             Boolean finalized = rs.getBoolean("grade_finalized");
@@ -169,14 +169,15 @@ public class ExamRepositoryImpl implements BaseRepository<Exam> {
                 ps = conn.prepareStatement(CHANGE_GRADE_FROM_STUDENT_EXAM_TABLE);
                 ps.setInt(1, newGrade);
                 ps.setInt(2, examId);
-                ps.setInt(3,studentId);
+                ps.setInt(3, studentId);
                 ps.executeUpdate();
             } else {
                 System.out.println("this grade is finalized and can not be change!!");
             }
         }
     }
-    public List<SeeStudentRequest> studentSeeHisGrade (int studentId) throws  SQLException {
+
+    public List<SeeStudentRequest> studentSeeHisGrade(int studentId) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(STUDENT_SEE_HIS_GRADE);
         ps.setInt(1, studentId);
         ResultSet rs = ps.executeQuery();

@@ -18,39 +18,42 @@ import java.util.Scanner;
 public class menu {
     private final static UsersServiceImpl usersService = new UsersServiceImpl(new UsersRepository());
     private final static CourseServiceImpl courseService = new CourseServiceImpl(new CourseRepositoryImpl());
-    private final static TeacherServiceImpl teacherService=new TeacherServiceImpl(new TeacherRepositoryImpl());
+    private final static TeacherServiceImpl teacherService = new TeacherServiceImpl(new TeacherRepositoryImpl());
     private final static StudentServiceImpl studentService = new StudentServiceImpl(new StudentRepositoryImpl());
     private final static ExamServiceImpl examService = new ExamServiceImpl(new ExamRepositoryImpl());
     static Scanner scan = new Scanner(System.in);
-   static boolean start = true;
-    public static void mainMenu(){
-       while(start) {
-        start =logInMenu();
-       }
+    static boolean start = true;
+
+    public static void mainMenu() {
+        while (start) {
+            start = logInMenu();
+        }
 
     }
-    public static boolean logInMenu(){   System.out.println("***********welcome**********");
-        int choose = utility.getIntInput("1-> login"+"\n2-> exit");
-        while(true){
-            if (choose == 2){
+
+    public static boolean logInMenu() {
+        System.out.println("***********welcome**********");
+        int choose = utility.getIntInput("1-> login" + "\n2-> exit");
+        while (true) {
+            if (choose == 2) {
                 return false;
             }
-            if (choose==1 ){
+            if (choose == 1) {
                 System.out.println("\n******* login menu *******\n");
                 System.out.println("please enter your username ->");
                 String username = scan.nextLine();
                 System.out.println("please enter your password ->");
-                String password =scan.nextLine();
-                try{
-                    String permission =usersService.logInUser(username,password);
-                    if (permission.equals("admin")){
+                String password = scan.nextLine();
+                try {
+                    String permission = usersService.logInUser(username, password);
+                    if (permission.equals("admin")) {
                         adminMenu();
                     } else if (permission.equals("student")) {
-                        studentMenu();
+                        studentMenu(username);
                     } else if (permission.equals("master")) {
                         masterMenu();
                     }
-                    }catch (UsersNotFindException usersNotFindException){
+                } catch (UsersNotFindException usersNotFindException) {
                     System.out.println("@ username or password is wrong @" +
                             "\n$try again$");
                 }
@@ -61,7 +64,7 @@ public class menu {
     }
 
     private static void masterMenu() {
-        while(true) {
+        while (true) {
             System.out.println("**************master menu**************");
             System.out.println("1 -> create new user");
             System.out.println("2 -> delete user");
@@ -70,10 +73,10 @@ public class menu {
             int choose2 = scan.nextInt();
             scan.nextLine();
             if (choose2 == 1) {
+                System.out.println("****If you want to create a student user, be careful username must be student id***");
                 System.out.println("what is username ");
                 String username;
                 username = scan.nextLine();
-
                 System.out.println("what is password ");
                 String password = scan.nextLine();
 
@@ -87,35 +90,31 @@ public class menu {
                 }
             } else if (choose2 == 4) {
                 logInMenu();
-            } else if (choose2==2) {
+            } else if (choose2 == 2) {
                 System.out.println("what is the id ?");
                 int id = scan.nextInt();
                 scan.nextLine();
                 usersService.delete(id);
-            } else if (choose2==3) {
+            } else if (choose2 == 3) {
                 usersService.printCountUsers();
                 usersService.printAllUsers();
             }
         }
     }
 
-    private static void studentMenu() {
-        while (true){
+    private static void studentMenu(String username) {
+        while (true) {
             System.out.println("*************student menu***********");
             System.out.println("1 -> see my grade and avg");
             System.out.println("2 -> exit");
             int choose4 = scan.nextInt();
             scan.nextLine();
-            if (choose4==2){
+            if (choose4 == 2) {
                 logInMenu();
-            } else if (choose4==1) {
-                System.out.println("what is your student id");
-                int studentId = scan.nextInt();
-                scan.nextLine();
-                examService.printWhatStudentSee(studentId);
+            } else if (choose4 == 1) {
+                examService.printWhatStudentSee(Integer.parseInt(username));
             }
         }
-
 
 
     }
@@ -140,10 +139,10 @@ public class menu {
             System.out.println("15 -> delete exam");
             System.out.println("16 -> see count and all exam information");
             System.out.println("17 -> set teacher for course");
-            System.out.println("18 -> add student to course");
-            System.out.println("19 -> set and change student grade");
+            System.out.println("18 -> add student to student & course table");
+            System.out.println("19 -> set and change student grade in student & exam table");
             System.out.println("20 -> set student grade finalized");
-            System.out.println("21 -> add grade exam for student");
+            System.out.println("21 -> add new student to exam(in exam & student table)");
             System.out.println("22 -> exit");
             int choose3 = scan.nextInt();
             scan.nextLine();
@@ -166,17 +165,17 @@ public class menu {
                 SaveCourseRequest saveCourseRequest = new SaveCourseRequest(courseId, courseTitle, courseUnite);
                 courseService.saveAndUpdate(saveCourseRequest);
 
-            } else if (choose3==3) {
+            } else if (choose3 == 3) {
                 System.out.println("what is course id");
                 int id = scan.nextInt();
                 scan.nextLine();
                 courseService.delete(id);
 
-            } else if (choose3==4) {
+            } else if (choose3 == 4) {
                 courseService.printCountCourse();
                 courseService.printAllCourse();
-                
-            } else if (choose3==5) {
+
+            } else if (choose3 == 5) {
                 System.out.println("what is national code");
                 String nationalCode = scan.nextLine();
                 System.out.println("what is firstname");
@@ -184,20 +183,20 @@ public class menu {
                 System.out.println("what is last name");
                 String lastname = scan.nextLine();
                 System.out.println("date born Enter a date (dd/mm/yyyy)");
-                String dob =scan.nextLine();
+                String dob = scan.nextLine();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 try {
                     Date dateDob = sdf.parse(dob);
 
-                System.out.println("what is course id (it can be null)");
-                Long courseId = scan.nextLong();
-                SaveTeacherRequest saveTeacherRequest =new SaveTeacherRequest(nationalCode,firstname,lastname,dateDob,courseId);
-                teacherService.saveAndUpdate(saveTeacherRequest);
-              } catch (ParseException e) {
+                    System.out.println("what is course id (it can be null)");
+                    Long courseId = scan.nextLong();
+                    SaveTeacherRequest saveTeacherRequest = new SaveTeacherRequest(nationalCode, firstname, lastname, dateDob, courseId);
+                    teacherService.saveAndUpdate(saveTeacherRequest);
+                } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
 
-            } else if (choose3==6) {
+            } else if (choose3 == 6) {
                 System.out.println("what is teacher id");
                 int teacherId = scan.nextInt();
                 scan.nextLine();
@@ -208,30 +207,30 @@ public class menu {
                 System.out.println("what is new last name");
                 String lastname = scan.nextLine();
                 System.out.println("new date born Enter a date (dd/mm/yyyy)");
-                String dob =scan.nextLine();
+                String dob = scan.nextLine();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 try {
                     Date dateDob = sdf.parse(dob);
 
                     System.out.println("what is new course id (it can be null)");
                     Long courseId = scan.nextLong();
-                    SaveTeacherRequest saveTeacherRequest =new SaveTeacherRequest(teacherId,nationalCode,firstname,lastname,dateDob,courseId);
+                    SaveTeacherRequest saveTeacherRequest = new SaveTeacherRequest(teacherId, nationalCode, firstname, lastname, dateDob, courseId);
                     teacherService.saveAndUpdate(saveTeacherRequest);
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
 
-            } else if (choose3==7) {
+            } else if (choose3 == 7) {
                 System.out.println("what is teacher id");
                 int id = scan.nextInt();
                 scan.nextLine();
                 teacherService.delete(id);
 
-            } else if (choose3==8) {
+            } else if (choose3 == 8) {
                 teacherService.PrintCountTeacher();
                 teacherService.printAllTeacher();
 
-            } else if (choose3==9) {
+            } else if (choose3 == 9) {
                 System.out.println("what is national code");
                 String nationalCode = scan.nextLine();
                 System.out.println("what is firstname");
@@ -239,19 +238,19 @@ public class menu {
                 System.out.println("what is last name");
                 String lastname = scan.nextLine();
                 System.out.println("date born Enter a date (dd/mm/yyyy)");
-                String dob =scan.nextLine();
+                String dob = scan.nextLine();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 try {
                     Date dateDob = sdf.parse(dob);
                     System.out.println("what is student gpu");
-                    double gpu =scan.nextDouble();
-                    SaveStudentRequest saveStudentRequest =new SaveStudentRequest(nationalCode,firstname,lastname,dateDob,gpu);
+                    double gpu = scan.nextDouble();
+                    SaveStudentRequest saveStudentRequest = new SaveStudentRequest(nationalCode, firstname, lastname, dateDob, gpu);
                     studentService.saveAndUpdate(saveStudentRequest);
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
 
-            } else if (choose3==10) {
+            } else if (choose3 == 10) {
                 System.out.println("what is student id");
                 int id = scan.nextInt();
                 scan.nextLine();
@@ -262,28 +261,28 @@ public class menu {
                 System.out.println("what is new last name");
                 String lastname = scan.nextLine();
                 System.out.println("new date born Enter a date (dd/mm/yyyy)");
-                String dob =scan.nextLine();
+                String dob = scan.nextLine();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 try {
                     Date dateDob = sdf.parse(dob);
                     System.out.println("what is new student gpu");
-                    double gpu =scan.nextDouble();
-                    SaveStudentRequest saveStudentRequest =new SaveStudentRequest(id,nationalCode,firstname,lastname,dateDob,gpu);
+                    double gpu = scan.nextDouble();
+                    SaveStudentRequest saveStudentRequest = new SaveStudentRequest(id, nationalCode, firstname, lastname, dateDob, gpu);
                     studentService.saveAndUpdate(saveStudentRequest);
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
 
-            } else if (choose3==11) {
+            } else if (choose3 == 11) {
                 System.out.println("what is student id");
                 int id = scan.nextInt();
                 scan.nextLine();
                 studentService.delete(id);
-            } else if (choose3==12) {
+            } else if (choose3 == 12) {
                 studentService.printCountOfStudent();
                 studentService.printAllStudentList();
 
-            } else if (choose3==13) {
+            } else if (choose3 == 13) {
                 System.out.println("what is teacher id");
                 int teacherId = scan.nextInt();
                 scan.nextLine();
@@ -294,74 +293,76 @@ public class menu {
                 scan.nextLine();
                 System.out.println("what is grade");
                 Long gpu = scan.nextLong();
-                
-                System.out.println(" exam date Enter a date (dd/mm/yyyy)");
-                String dob =scan.nextLine();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                try {
-                    Date dateDob = sdf.parse(dob);
-                    SaveExamRequest saveExamRequest = new SaveExamRequest(teacherId,nationalCode,courseId,gpu,dateDob);
-                    examService.saveAndUpdate(saveExamRequest);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-            } else if (choose3==14) {
-                System.out.println("what is exam id ");
-                int examId =scan.nextInt();
                 scan.nextLine();
-                System.out.println("what is teacher id");
-                int teacherId = scan.nextInt();
-                scan.nextLine();
-                System.out.println("what is teacher national code");
-                String nationalCode = scan.nextLine();
-                System.out.println("what is course id");
-                int courseId = scan.nextInt();
-                scan.nextLine();
-                System.out.println("what is grade");
-                Long gpu = scan.nextLong();
 
-                System.out.println(" exam date Enter a date (dd/mm/yyyy)");
-                String dob =scan.nextLine();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 try {
+                    System.out.println(" exam date Enter a date (dd/mm/yyyy)");
+                    String dob = scan.nextLine();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     Date dateDob = sdf.parse(dob);
-                    SaveExamRequest saveExamRequest = new SaveExamRequest(examId,teacherId,nationalCode,courseId,gpu,dateDob);
+                    SaveExamRequest saveExamRequest = new SaveExamRequest(teacherId, nationalCode, courseId, gpu, dateDob);
                     examService.saveAndUpdate(saveExamRequest);
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
-                
-            } else if (choose3==15) {
+            } else if (choose3 == 14) {
+                System.out.println("what is exam id ");
+                int examId = scan.nextInt();
+                scan.nextLine();
+                System.out.println("what is teacher id");
+                int teacherId = scan.nextInt();
+                scan.nextLine();
+                System.out.println("what is teacher national code");
+                String nationalCode = scan.nextLine();
+                System.out.println("what is course id");
+                int courseId = scan.nextInt();
+                scan.nextLine();
+                System.out.println("what is grade");
+                Long gpu = scan.nextLong();
+                scan.nextLine();
+
+                try {
+                    System.out.println(" exam date Enter a date (dd/mm/yyyy)");
+                    String dob = scan.nextLine();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    Date dateDob = sdf.parse(dob);
+                    SaveExamRequest saveExamRequest = new SaveExamRequest(examId, teacherId, nationalCode, courseId, gpu, dateDob);
+                    examService.saveAndUpdate(saveExamRequest);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
+            } else if (choose3 == 15) {
                 System.out.println("what is exam id");
                 int id = scan.nextInt();
                 scan.nextLine();
                 examService.delete(id);
-            } else if (choose3==16) {
+            } else if (choose3 == 16) {
                 examService.PrintCountOfExam();
                 examService.printAllExam();
-                
-            } else if (choose3==17) {
+
+            } else if (choose3 == 17) {
                 System.out.println("what is course id");
                 int courseId = scan.nextInt();
                 scan.nextLine();
                 System.out.println("what is teacher id");
-                int teacherId =scan.nextInt();
+                int teacherId = scan.nextInt();
                 scan.nextLine();
-                teacherService.setTeacherForCourse(courseId,teacherId);
-            } else if (choose3==18) {
+                teacherService.setTeacherForCourse(courseId, teacherId);
+            } else if (choose3 == 18) {
                 System.out.println("what is course id");
                 int courseId = scan.nextInt();
                 scan.nextLine();
                 System.out.println("what is student id");
-                int studentId =scan.nextInt();
+                int studentId = scan.nextInt();
                 scan.nextLine();
                 System.out.println("what is student national code");
-                String nationalCode =scan.nextLine();
+                String nationalCode = scan.nextLine();
                 courseService.addStudentsToCourse(courseId,
-                        studentId,nationalCode);
-            } else if (choose3==19) {
+                        studentId, nationalCode);
+            } else if (choose3 == 19) {
                 System.out.println("what is grade");
-                int grade =scan.nextInt();
+                int grade = scan.nextInt();
                 scan.nextLine();
                 System.out.println("what is exam id");
                 int examId = scan.nextInt();
@@ -369,18 +370,18 @@ public class menu {
                 System.out.println("what is student id");
                 int studentId = scan.nextInt();
                 scan.nextLine();
-                examService.changeGrade(grade ,examId,studentId);
+                examService.changeGrade(grade, examId, studentId);
 
-            } else if (choose3==20) {
+            } else if (choose3 == 20) {
                 System.out.println("which exam you want to finalizad ");
                 int examId = scan.nextInt();
                 scan.nextLine();
                 System.out.println("and which student");
                 int studentId = scan.nextInt();
                 scan.nextLine();
-                examService.GradeFinalized(examId,studentId);
+                examService.GradeFinalized(examId, studentId);
 
-            } else if (choose3==21) {
+            } else if (choose3 == 21) {
                 System.out.println("what is student id");
                 int id = scan.nextInt();
                 scan.nextLine();
@@ -389,8 +390,8 @@ public class menu {
                 System.out.println("what is exam id");
                 int examId = scan.nextInt();
                 scan.nextLine();
-                examService.addExamToStudent(id ,nationalCode,examId);
-            } else if (choose3==22) {
+                examService.addExamToStudent(id, nationalCode , examId);
+            } else if (choose3 == 22) {
                 logInMenu();
             }
 
