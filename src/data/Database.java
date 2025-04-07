@@ -20,5 +20,4 @@ public class Database {
     public PreparedStatement getPreparedStatement(String sql) throws SQLException{
         return this.getConnectionToDataBase().prepareStatement(sql);
     }
-
 }
